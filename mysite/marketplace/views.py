@@ -1,10 +1,49 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
 from django.template import loader
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, authenticate
 
 from .models import Item, Question
 
-# Create your views here.
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            # Redirect to a success page.
+            return redirect('marketplace:index')  # Assuming 'index' redirects to your homepage
+    else:
+        form = UserCreationForm()
+    return render(request, 'marketplace/register.html', {'form': form})
+
+def login_view(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                return redirect('marketplace:index')
+        else:
+            form = AuthenticationForm()
+        return render(request, 'marketplace/login.html', {'form': form})
+
+def custom_login_view(request):
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                # Return an error response if authentication failed
+                return HttpResponse("Invalid login credentials.")
+        else:
+            # Render the login form
+            return render(request, 'login.html')
+
 def index(request):
     newest_items = Item.objects.order_by('-id')[:5]
     latest_question_list = Question.objects.order_by("-pub_date")[:5]
