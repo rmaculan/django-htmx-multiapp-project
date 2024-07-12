@@ -58,7 +58,7 @@ def item_list(request):
 
 def item_detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
-    return render(request, "marketplace/items.html", {"item": item})
+    return render(request, "marketplace/item_detail.html", {"item": item})
 
 # def order_detail(request, order_id):
 #     return HttpResponse(f"You're looking at order {order_id}.")
