@@ -45,7 +45,6 @@
       }
     </style>
   </head>
-
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
@@ -98,63 +97,22 @@
       </div>
     </nav>
     <div class="container">
-      {% block content %} {% if newest_items %}
-      <h1>Newest Items</h1>
-      {% for item in newest_items %}
-      <div class="card mb-3" style="max-width: 540px">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img
-              src="{{ item.image.url }}"
-              class="img-fluid rounded-start"
-              alt="{{ item.name }}"
-            />
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">{{ item.name }}</h5>
-              <strong>price: {{ item.price }}</strong>
-              <p class="card-text">description: {{ item.description }}</p>
-              <p class="card-text">
-                <small class="text-body-secondary"
-                  >date listed: {{ item.date_listed }}</small
-                >
-              </p>
-              <a
-                href="/marketplace/item_detail/{{ item.id }}/"
-                type="button"
-                class="btn btn-primary"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                View
-              </a>
-            </div>
+      <h1>User Profile</h1>
+      <div class="container">
+        <div class="card">
+          <img
+            src="{% static 'images/user.png' %}"
+            class="card-img-top"
+            alt="User"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ user.username }}</h5>
+            <p class="card-text">{{ user.email }}</p>
+            <p class="card-text">{{ user.first_name }} {{ user.last_name }}</p>
           </div>
         </div>
       </div>
-      {% endfor %} {% else %}
-      <p>No items are available.</p>
-      {% endif %}
-    </div>
-    <div class="container">
-      <h1>Polls</h1>
-      {% if latest_question_list %}
-      <ul>
-        {% for question in latest_question_list %}
-        <li>
-          <a href="/marketplace/{{ question.id }}/"
-            >{{ question.question_text }}</a
-          >
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>No polls are available.</p>
-      {% endif %} {% endblock %}
-    </div>
-
-    <footer>
+     <footer>
       <div class="container">
         <p>&copy; 2024 Marketplace</p>
       </div>

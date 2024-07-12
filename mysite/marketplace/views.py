@@ -43,6 +43,10 @@ def custom_login_view(request):
         else:
             # Render the login form
             return render(request, 'login.html')
+        
+def user_profile(request):
+    user = request.user
+    return render(request, 'marketplace/user_profile.html', {'user': user})
 
 def index(request):
     newest_items = Item.objects.order_by('-id')[:5]
@@ -68,9 +72,6 @@ def item_detail(request, item_id):
 
 # def cart_detail(request, cart_id):
 #     return HttpResponse(f"You're looking at cart {cart_id}.")
-
-# def user_profile(request, user_id):
-#     return HttpResponse(f"You're looking at user profile {user_id}.")
 
 def question_detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

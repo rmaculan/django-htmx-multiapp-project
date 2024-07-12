@@ -66,29 +66,30 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'marketplace:index' %}">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'marketplace:register' %}">
-                {% if user.is_authenticated %}Profile{% else %} Register {% endif %}
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'marketplace:login' %}">
-                {% if user.is_authenticated %} Logout {% else %} Login {% endif %}
-              </a>
-            </li>
             <li class="nav-item dropdown">
               <button
                 class="btn btn-dark dropdown-toggle"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Dropdown
+                Get Started
               </button>
               <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li >
+                  {% if user.is_authenticated %}
+                  <a class="dropdown-item" href="{% url 'marketplace:user_profile' %}">
+                  Profile
+                  </a>
+                  {% else %}
+                  <a class="dropdown-item" href="{% url 'marketplace:register' %}"> 
+                  Register 
+                  </a>
+                  {% endif %}
+                </li>
                 <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a class="dropdown-item" href="{% url 'marketplace:login' %}">
+                  {% if user.is_authenticated %} Logout {% else %} Login {% endif %}
+                  </a>
                 </li>
               </ul>
             </li>
