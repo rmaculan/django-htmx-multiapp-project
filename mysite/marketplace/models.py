@@ -3,10 +3,15 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings  # Import settings to use MEDIA_ROOT
+from django.utils.translation import gettext as _
 
+# Create your models here.
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    is_seller = models.BooleanField(default=False)
+    is_buyer = models.BooleanField(default=False)
+    is_blog_author = models.BooleanField(default=False)
 
 class CategoryModel(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -22,7 +27,10 @@ class Item(models.Model):
     quantity = models.IntegerField()
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='items/', blank=True, null=True)
-    date_listed = models.DateTimeField(default=datetime.datetime.now)  # Adjusted line
+    date_listed = models.DateTimeField(default=datetime.datetime.now)
+    is_sold = models.BooleanField(default=False)
+    if is_sold:
+        date_sold = models.DateTimeField(default=datetime.datetime.now)
     condition = models.CharField(max_length=20, choices=[('N', 'New'), ('U', 'Used')], default='U')
     category = models.ForeignKey(CategoryModel, on_delete=models.SET_NULL, null=True, blank=True)
 
