@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Blog </title>
+</head>
+<body>
+    <header class="bg-gray-800 text-white p-4">
+        <nav>
+            <a href="{% url 'index' %}" class="mr-4">
+            Home
+            </a>
+            <a href="" class="mr-4">
+            About
+            </a>
+            <a href="" class="mr-4">
+            Contact
+            </a>
+        </nav>
+    </header>
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold">{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
+        <a href="{% url 'index' %}" class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded">Back</a>
+    </div>
+</body>
+</html>

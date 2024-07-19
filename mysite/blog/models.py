@@ -44,18 +44,11 @@ class Post(models.Model):
     author = models.ForeignKey(BlogCustomUser, on_delete=models.CASCADE)
     is_author = models.BooleanField(default=False)
 
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-        ):
-        self.slug = slugify(self.name)
-        if update_fields is not None and "name" in update_fields:
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.slug = slugify(self.title)
+        if update_fields is not None and "title" in update_fields:
             update_fields = {"slug"}.union(update_fields)
-        super().save(
-        force_insert=force_insert,
-        force_update=force_update,
-        using=using,
-        update_fields=update_fields,
-        )
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields,)
 
     def __str__(self):
         return self.title
