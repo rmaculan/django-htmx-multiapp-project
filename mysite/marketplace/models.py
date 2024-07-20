@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.conf import settings  # Import settings to use MEDIA_ROOT
 from django.utils.translation import gettext as _
 
+
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

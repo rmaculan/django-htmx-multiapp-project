@@ -1,36 +1,87 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Sales </title>
-</head>
-<body>
-    <header class="bg-gray-800 text-white p-4">
-        <nav>
-            <a href="{% url 'index' %}" class="mr-4">
-            Home
-            </a>
-            <a href="" class="mr-4">
-            About
-            </a>
-            <a href="" class="mr-4">
-            Contact
-            </a>
-        </nav>
-    </header>
-    <div class="w-full flex-grow flex flex-col justify-start items-start px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold mb-4">Blog Posts</h1>
-        <div class="grid grid-cols-3 gap-4">
-            {% for post in posts %}
-                <div class="border p-4">
-                    <h2 class="text-xl font-bold">{{ post.title }}</h2>
-                    <p>{{ post.content }}</p>
-                    <a href="{% url 'post_detail' post.id %}" class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded">View</a>
-                </div>
-            {% endfor %}
+    <title>Blog</title>
+  </head>
+  <body>
+    <header class="bg-primary py-4">
+      <nav class="container mx-auto flex justify-between items-center px-4">
+        <a href="{% url 'index' %}" class="text-black text-2xl font-bold"
+          >Blog Page</a
+        >
+        <div>
+          <a href="{% url 'index' %}" class="text-black hover:text-accent ml-4"
+            >Home</a
+          >
+          <a href="#" class="text-black hover:text-accent ml-4">About</a>
+          <a href="#" class="text-black hover:text-accent ml-4">Contact</a>
         </div>
+      </nav>
+    </header>
+    <div
+      class="container w-full flex-grow flex flex-col justify-start items-start px-4 sm:px-6 lg:px-8"
+    >
+      <!-- Blog Content -->
+      <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-4">Latest Articles</h1>
+        <article class="blog-content prose prose-lg max-w-none">
+          {% for post in posts %}
+          <h2 class="text-xl font-bold">{{ post.title }}</h2>
+          <img
+            src="https://placehold.co/1200x600"
+            alt="A minimalist room with a few pieces of furniture and a large window letting in natural light, creating a sense of calm and tranquility"
+            width="1200"
+            height="600"
+          />
+          <p>{{ post.content }}</p>
+          
+          <div class="ml-2 text-xs">
+            <span class="block font-semibold text-gray-700"
+              >
+              {{ post.author }}
+              </span>
+            <span class="block font-medium text-gray-500"
+              >
+              Chief Technical Writer
+              </span>
+          </div>
+          <a
+            href="{% url 'post_detail' post.id %}"
+            class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            View
+          </a>
+          <!-- Rest of the article content... -->
+          {% endfor %}
+          
+        </article>
+      </main>
+      <!-- Footer -->
+  <footer class="bg-primary py-8">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <div class="text-black">
+        &copy; Blog Page 2021
+      </div>
+      <div>
+        <a href="#" class="text-black hover:text-accent ml-4">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="text-black hover:text-accent ml-4">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-black hover:text-accent ml-4">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
     </div>
-</body>
+  </footer>
+    </div>
+  </body>
 </html>

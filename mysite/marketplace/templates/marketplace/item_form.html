@@ -82,43 +82,11 @@
     </nav>
     <div class="container">
         <h1>Add Item</h1>
-        <form action="{% url 'marketplace:create_item' %}" method="POST">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="image" class="form-label">Upload</label>
-                <input type="file" class="form-control" name="image" accept="image/*" />
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">Item Name</label>
-                <input type="text" class="form-control" name="name" placeholder="Enter item name" />
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Item Description</label>
-                <input type="text" class="form-control" name="description" placeholder="Enter item description" />
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Item Price</label>
-                <input type="number" class="form-control" name="price" placeholder="Enter item price" />
-            </div>
-            <div class="mb-3">
-                <label for="quantity" class="form-label">Item Quantity</label>
-                <input type="number" class="form-control" name="quantity" placeholder="Enter item quantity" />
-            </div>
-            <div class="mb-3">
-                <label for="condition" class="form-label">Condition</label>
-                <input type="text" class="form-control" name="condition" placeholder="Enter New or Used" />
-            </div>
-            <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select name="category" class="form-control">
-                    {% for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
         </form>
-    </div>
     <footer>
       <div class="container">
         <p>&copy; 2024 Marketplace</p>

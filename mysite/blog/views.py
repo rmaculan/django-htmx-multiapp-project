@@ -1,14 +1,43 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Post
+from django.views.generic.edit import CreateView
+from .forms import PostForm
+from django.core.files.storage import default_storage
+from PIL import Image
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'index.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data['thumbnail']:
+            # Process the thumbnail here
+            # Example: Resizing the image
+            try:
+                with default_storage.open(
+                    form.instance.thumbnail.name, 'rb+') as img_file:
+                    img = Image.open(img_file)
+                    img = img.resize((300, 300))  # Example resize
+                    img.save(img_file)
+            except IOError:
+                pass  # Handle error
+        return response
 
 @login_required
 def create_blog_post(request):
     if request.method == 'POST':
-        title = request.POST['title']
-        content = request.POST['content']
-        Post.objects.create(title=title, content=content, author=request.user)
-        return redirect('blog_post_list')  # Assuming you have a URL pattern named 'blog_post_list'
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('index')  # Redirect to the list of blog posts after successful creation
+    else:
+        form = PostForm()
+    return render(request, 'blog/create_blog_post.html', {'form': form})
 
 def read_blog_posts(request):
     blog_posts = Post.objects.all().order_by('-publish_date')
@@ -22,6 +51,7 @@ def read_blog_post(request, post_id):
 # def update_blog_post(request, post_id):
 #     post = get_object_or_404(Post, pk=post_id)
 #     if request.method == 'POST':
+#         post.thumbnail = request.FILES.get('thumbnail')
 #         post.title = request.POST['title']
 #         post.content = request.POST['content']
 #         post.save()

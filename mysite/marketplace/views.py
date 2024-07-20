@@ -6,8 +6,33 @@ from django.contrib.auth import logout
 from django import forms
 from .models import Item, CategoryModel, Question
 import logging
+from django.views.generic.edit import CreateView
+from .forms import ItemPostForm
+from django.core.files.storage import default_storage
+from PIL import Image
 
 logger = logging.getLogger(__name__)
+
+class ItemPostView(CreateView):
+    model = Item
+    form_class = ItemPostForm
+    template_name = 'marketplace/item_form.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data['image']:
+            # Process the image here
+            # Example: Resizing the image
+            try:
+                with default_storage.open(form.instance.image.name, 'rb+') as img_file:
+                    img = Image.open(img_file)
+                    img = img.resize((300, 300))  # Example resize
+                    img.save(img_file)
+            except IOError:
+                pass  # Handle error
+        return response
+    
+
 
 def register(request):
     if request.method == 'POST':
@@ -81,8 +106,9 @@ def create_item(request):
         )
         return redirect('marketplace:index')
     else:
-        categories = CategoryModel.objects.all()  # For rendering categories in the form
-        return render(request, 'marketplace/item_form.html', {'categories': categories})
+        form = ItemPostForm()
+        categories = CategoryModel.objects.all()  # Fetch all categories for selection
+        return render(request, 'marketplace/item_form.html', {'form': form, 'categories': categories})
 
 # Read
 def item_list(request):
