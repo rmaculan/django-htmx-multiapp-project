@@ -1,0 +1,94 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Blog</title>
+  </head>
+    <body>
+        <header class="bg-primary py-4">
+            <nav class="container mx-auto flex justify-between items-center px-4">
+                <ul class="hidden sm:flex space-x-4">
+                    <li>
+                        <a
+                            href="{% url 'blog:index' %}"
+                            class="text-black hover:text-accent"
+                        >
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <button
+                            class="text-black hover:text-accent"
+                            onclick="toggleDropdown()"
+                        >
+                            About
+                        </button>
+                    </li>
+                    <li>
+                        <div
+                            id="about-dropdown"
+                            class="hidden absolute left-0 mt-2 w-48 py-2 bg-white rounded-md shadow-lg"
+                        >
+                            <a
+                                a
+                                href=""
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                >Contact</a
+                            >
+                        </div>
+                    </li>
+                </ul>
+                <div class="relative inline-block text-left">
+                    <div>
+                        <button
+                            type="button"
+                            class="text-black hover:text-accent"
+                            onclick="toggleDropdown()"
+                        >
+                            Account
+                        </button>
+                    </div>
+                    <div
+                        id="account-dropdown"
+                        class="hidden absolute left-0 mt-2 w-48 py-2 bg-white rounded-md shadow-lg"
+                    >
+                        <a
+                            href="{% url 'blog:profile' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                            >Profile</a
+                        >
+                        <a
+                            href="{% url 'blog:login' %}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                            >Login</a
+                        >
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main class="container mx-auto py-4">
+            <h1 class="text-3xl font-bold">Profile</h1>
+            <p>Welcome to your profile page!</p>
+        </main>
+        <footer class="bg-primary py-4">
+            <div class="container mx-auto text-center text-white">
+                <p>&copy; 2021 Blog</p>
+            </div>
+        </footer>
+        <script>
+            function toggleDropdown() {
+                const dropdown = document.getElementById('about-dropdown');
+                dropdown.classList.toggle('hidden');
+            }
+        </script>
+    </body>
+</html>

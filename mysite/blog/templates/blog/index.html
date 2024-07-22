@@ -1,3 +1,4 @@
+{% load static %}
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,20 +9,121 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>Blog</title>
   </head>
   <body>
     <header class="bg-primary py-4">
       <nav class="container mx-auto flex justify-between items-center px-4">
-        <a href="{% url 'index' %}" class="text-black text-2xl font-bold"
-          >Blog Page</a
-        >
-        <div>
-          <a href="{% url 'index' %}" class="text-black hover:text-accent ml-4"
-            >Home</a
+        
+
+        <!-- Add collapsable, unordered list of tabs: home, about, contact -->
+        <ul class="hidden sm:flex space-x-4">
+          <li>
+            <a
+              href="{% url 'blog:index' %}"
+              class="text-black hover:text-accent"
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-black hover:text-accent">
+              About
+            </a>
+            </li>
+            <li>
+              <a href="#" class="text-black hover:text-accent">
+                Contact
+              </a>
+            </li>
+            <li>
+              <a
+                href="{% url 'blog:create_blog_post' %}"
+                class="text-black hover:text-accent"
+              >
+                Post Blog
+              </a>
+            </li>
+          </li>
+        </ul>
+
+        <!-- Add dropdown menu for account options -->
+        <div class="relative inline-block text-left">
+          <div>
+            <button
+              type="button"
+              class="
+              inline-flex 
+              justify-center w-full 
+              rounded-md border 
+              border-gray-300 
+              shadow-sm px-4 py-2 
+              bg-white text-sm font-medium text-gray-700 
+              hover:bg-gray-50 
+              focus:outline-none 
+              focus:ring-2 
+              focus:ring-offset-2 f
+              ocus:ring-indigo-500
+              "
+              id="options-menu"
+              aria-haspopup="true"
+              aria-expanded="true"
+            >
+              Account
+              <svg
+                class="-mr-1 ml-2 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Initially hidden dropdown menu -->
+          <div
+            class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 dropdown"
           >
-          <a href="#" class="text-black hover:text-accent ml-4">About</a>
-          <a href="#" class="text-black hover:text-accent ml-4">Contact</a>
+            <div
+              class="py-1"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'blog:profile' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Profile
+              </a>
+              <a
+                href="{% url 'blog:index' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Logout
+              </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Login
+              </a>
+              {% endif %}
+              
+            </div>
+          </div>
         </div>
       </nav>
     </header>
@@ -30,58 +132,94 @@
     >
       <!-- Blog Content -->
       <main class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-4">Latest Articles</h1>
-        <article class="blog-content prose prose-lg max-w-none">
-          {% for post in posts %}
-          <h2 class="text-xl font-bold">{{ post.title }}</h2>
-          <img
-            src="https://placehold.co/1200x600"
-            alt="A minimalist room with a few pieces of furniture and a large window letting in natural light, creating a sense of calm and tranquility"
-            width="1200"
-            height="600"
-          />
-          <p>{{ post.content }}</p>
-          
-          <div class="ml-2 text-xs">
-            <span class="block font-semibold text-gray-700"
-              >
-              {{ post.author }}
-              </span>
-            <span class="block font-medium text-gray-500"
-              >
-              Chief Technical Writer
-              </span>
-          </div>
-          <a
-            href="{% url 'post_detail' post.id %}"
-            class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            View
-          </a>
-          <!-- Rest of the article content... -->
-          {% endfor %}
-          
-        </article>
+        <div class="greeting">
+        Welcome back, {{ user.username }}!
+        </div>
+        <h1 class="text-3xl font-bold mb-4">
+        Latest Articles
+        </h1>
+        <div class="container mx-auto px-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for post in posts %}
+    <div class="col-span-1 md:col-span-1 lg:col-span-1"> <!-- Ensure each article spans one column -->
+      <article class="blog-content prose prose-lg max-w-none p-4">
+        <h2 class="text-xl font-bold">{{ post.title }}</h2>
+        <img
+          src="{{ post.thumbnail.url }}"
+          alt="{{ post.title }}"
+          width="1000"
+          height="600"
+        />
+        <p>{{ post.content | truncatewords:12 }}</p>
+
+        <div class="ml-2 text-xs">
+          <span class="block font-semibold text-gray-700">
+            {{ post.author }}
+          </span>
+          <span class="block font-medium text-gray-500">
+            Chief Technical Writer
+          </span>
+        </div>
+        <a
+          href="{% url 'blog:post_detail' post.id %}"
+          class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          View
+        </a>
+      </article>
+    </div>
+    {% empty %}
+    <p>No posts available.</p>
+    {% endfor %}
+  </div>
+</div>
+        
       </main>
+
       <!-- Footer -->
-  <footer class="bg-primary py-8">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <div class="text-black">
-        &copy; Blog Page 2021
-      </div>
-      <div>
-        <a href="#" class="text-black hover:text-accent ml-4">
-          <i class="fab fa-facebook"></i>
-        </a>
-        <a href="#" class="text-black hover:text-accent ml-4">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#" class="text-black hover:text-accent ml-4">
-          <i class="fab fa-instagram"></i>
-        </a>
-      </div>
+      <footer class="bg-primary py-8">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+          <div class="text-black">&copy; Blog Page 2021</div>
+          <div>
+            <a href="#" class="text-black hover:text-accent ml-4">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="text-black hover:text-accent ml-4">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-black hover:text-accent ml-4">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
-  </footer>
-    </div>
+
+    <script>
+
+      // Dropdown menu functionality
+      function toggleDropdown() {
+        var dropdown = document.getElementById("about-dropdown");
+        dropdown.classList.toggle("hidden");
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const optionsMenu = document.getElementById("options-menu");
+        const dropdownMenu = document.querySelector(".dropdown");
+
+        optionsMenu.addEventListener("click", function (event) {
+          event.stopPropagation(); // Prevents the menu from closing when clicking inside it
+
+          dropdownMenu.classList.toggle("show"); // Toggles the 'show' class
+        });
+
+        // Close the dropdown menu if the user clicks outside of it
+        window.addEventListener("click", function (event) {
+          if (!event.target.matches("#options-menu")) {
+            dropdownMenu.classList.remove("show");
+          }
+        });
+      });
+    </script>
   </body>
 </html>
