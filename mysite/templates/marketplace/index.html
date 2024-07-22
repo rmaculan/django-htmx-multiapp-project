@@ -51,7 +51,7 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'marketplace:index' %}">
           Free Marketspace
-          </a>
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -67,22 +67,22 @@
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link" href="{% url 'marketplace:index' %}">
-              Home
+                Home
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'marketplace:create_item' %}">
                 Sell
-                </a>
+              </a>
             </li>
-            
+
             <li class="nav-item dropdown">
               <button
                 class="btn btn-dark dropdown-toggle"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Settings
+                Account
               </button>
               <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
@@ -92,6 +92,12 @@
                     href="{% url 'marketplace:user_profile' %}"
                   >
                     Profile
+                  </a>
+                  <a
+                    class="dropdown-item"
+                    href="{% url 'marketplace:seller_items' %}"
+                  >
+                    Items Listed
                   </a>
                   {% else %}
                   <a
@@ -103,8 +109,12 @@
                   {% endif %}
                 </li>
                 <li>
-                  <a class="dropdown-item" href="{% url 'marketplace:login' %}">
-                    {% if user.is_authenticated %} Logout {% else %} Login {% endif %}
+                  <a class="dropdown-item" href="{% url 'marketplace:logout' %}">
+                      {% if user.is_authenticated %}
+                          Logout
+                      {% else %}
+                          Login
+                      {% endif %}
                   </a>
                 </li>
               </ul>
@@ -113,71 +123,65 @@
         </div>
       </div>
     </nav>
+    {% block content %} 
+    {% if newest_items %}
     <div class="container">
-      {% block content %} {% if newest_items %}
       <h1>Newest Items</h1>
-      {% for item in newest_items %}
-      <div class="card mb-3" style="max-width: 540px">
-        <div class="row g-0">
-          <div class="col-md-4">
-            {% if item.image %}
-            <img
-              src="{{ item.image.url }}"
-              class="img-fluid rounded-start"
-              alt="{{ item.name }}"
-            />
-            {% else %}
-            <!-- Display a placeholder or a message indicating no image -->
-            <img
-              src="/media/images/no_image.png"
-              class="img-fluid rounded-start"
-              alt="No Image"
-            />
-            {% endif %}
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">{{ item.name }}</h5>
-              <strong>price: {{ item.price }}</strong>
-              <p class="card-text">description: {{ item.description }}</p>
-              <p class="card-text">
-                <small class="text-body-secondary"
-                  >date listed: {{ item.date_listed }}</small
-                >
-              </p>
-              <a
-                href="/marketplace/item_detail/{{ item.id }}/"
-                type="button"
-                class="btn btn-primary"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                View
-              </a>
+      <div class="row">
+        <!-- Wrap items in a row -->
+        {% for item in newest_items %}
+        <div class="col-md-4">
+          <!-- Each item takes up 4 columns on medium screens and larger -->
+          <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                {% if item.image %}
+                <img
+                  src="{{ item.image.url }}"
+                  class="img-fluid rounded-start"
+                  alt="{{ item.name }}"
+                />
+                {% else %}
+                <img
+                  src="/media/images/no_image.png"
+                  class="img-fluid rounded-start"
+                  alt="No Image"
+                />
+                {% endif %}
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <strong>Price: {{ item.price }}</strong>
+                  <p class="card-text">Description: {{ item.description }}</p>
+                  <p class="card-text">
+                    <small class="text-muted"
+                      >Date Listed: {{ item.date_listed }}</small
+                    >
+                  </p>
+                  <a
+                    href="/marketplace/item_detail/{{ item.id }}/"
+                    type="button"
+                    class="btn btn-primary"
+                  >
+                    View
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <!-- End of col-md-4 -->
+        {% endfor %}
       </div>
-      {% endfor %} {% else %}
+      <!-- End of row -->
+      {% else %}
       <p>No items are available.</p>
       {% endif %}
     </div>
-    <div class="container">
-      <h1>Polls</h1>
-      {% if latest_question_list %}
-      <ul>
-        {% for question in latest_question_list %}
-        <li>
-          <a href="/marketplace/{{ question.id }}/"
-            >{{ question.question_text }}</a
-          >
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>No polls are available.</p>
-      {% endif %} {% endblock %}
-    </div>
+    <!-- Close container -->
+    {% endblock %}
+    
 
     <footer>
       <div class="container">

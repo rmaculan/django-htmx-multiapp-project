@@ -8,6 +8,9 @@ from .forms import PostForm
 from django.core.files.storage import default_storage
 from PIL import Image
 from .models import Post
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -54,6 +57,7 @@ def login_view(request):
         return render(request, 'blog/login.html', {'form': form})
 
 def logout_view(request):
+    logger.info("Logout view accessed")
     logout(request)
     return redirect('blog:index')
 

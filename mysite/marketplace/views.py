@@ -31,8 +31,6 @@ class ItemPostView(CreateView):
                 pass  # Handle error
         return response
     
-
-
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -57,6 +55,7 @@ def login_view(request):
         return render(request, 'marketplace/login.html', {'form': form})
 
 def logout_view(request):
+    logger.info("Logout view accessed")
     logout(request)
     return redirect('marketplace:index')
         
@@ -118,6 +117,11 @@ def item_detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     return render(request, 'marketplace/item_detail.html', {'item': item})
 
+# vview listed items by seller
+def seller_items(request):
+    items = Item.objects.filter(seller=request.user)
+    return render(request, 'marketplace/seller_items.html', {'items': items})
+
 def search_items(request):
     query = request.GET.get('query')
     items = Item.objects.filter(title__icontains=query)
@@ -127,16 +131,13 @@ def search_items(request):
 def update_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     if request.method == 'POST':
-        item.image = request.FILES.get('image', item.image)
-        item.name = request.POST['name']
-        item.description = request.POST['description']
-        item.condition = request.POST['condition']
-        item.quantity = request.POST['quantity']
-        item.price = request.POST['price']
-        item.save()
-        return redirect('marketplace:item_detail', item_id=item.id)
+        form = ItemPostForm(request.POST, request.FILES, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('marketplace:item_detail', item_id=item.id)  # Redirect to detail view or another appropriate view
     else:
-        return render(request, 'marketplace/item_form.html', {'item': item})
+        form = ItemPostForm(instance=item)
+    return render(request, 'marketplace/update_item.html', {'form': form})
 
 # Delete
 @login_required
@@ -144,7 +145,7 @@ def delete_item(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     if request.method == 'POST':
         item.delete()
-        return redirect('marketplace:item_list')
+        return redirect('marketplace:index')
     else:
         return render(request, 'marketplace/item_confirm_delete.html', {'item': item})
 

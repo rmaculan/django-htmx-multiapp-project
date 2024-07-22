@@ -38,12 +38,21 @@
               </a>
             </li>
             <li>
+              {% if user.is_authenticated %}
               <a
                 href="{% url 'blog:create_blog_post' %}"
                 class="text-black hover:text-accent"
               >
                 Post Blog
               </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="text-black hover:text-accent"
+              >
+                Login
+              </a>
+              {% endif %}
             </li>
           </li>
         </ul>
@@ -106,7 +115,7 @@
                 Profile
               </a>
               <a
-                href="{% url 'blog:index' %}"
+                href="{% url 'blog:logout' %}"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
@@ -130,11 +139,22 @@
     <div
       class="container w-full flex-grow flex flex-col justify-start items-start px-4 sm:px-6 lg:px-8"
     >
+
+       <!-- Greeting message for users and guests -->
+    <div class="container mx-auto px-2 py-4">
+       <p class="text-3xl mb-4">
+          {% if user.is_authenticated %}
+          Welcome, {{ user.username }}
+          {% else %}
+          Welcome, Guest
+          {% endif %}
+        </p>
+    </div>
+        
       <!-- Blog Content -->
-      <main class="container mx-auto px-4 py-8">
-        <div class="greeting">
-        Welcome back, {{ user.username }}!
-        </div>
+    <main class="container mx-auto px-4 py-8">
+
+       
         <h1 class="text-3xl font-bold mb-4">
         Latest Articles
         </h1>

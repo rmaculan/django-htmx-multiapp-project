@@ -71,7 +71,11 @@
                 </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'marketplace:login' %}">
-                    {% if user.is_authenticated %} Logout {% else %} Login {% endif %}
+                    {% if user.is_authenticated %} 
+                    Logout 
+                    {% else %} 
+                    Login 
+                    {% endif %}
                   </a>
                 </li>
               </ul>
@@ -81,12 +85,36 @@
       </div>
     </nav>
     <div class="container">
-        <h1>Add Item</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Submit</button>
-        </form>
+    <h1>Add Item</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.name.label_tag }}
+        <div class="mb-3">
+            {{ form.name }}
+        </div>
+        {{ form.description.label_tag }}
+        <div class="mb-3">
+            {{ form.description }}
+        </div>
+        {{ form.price.label_tag }}
+        <div class="mb-3">
+            {{ form.price }}
+        </div>
+        <div class="mb-3">
+            {{ form.condition.label_tag }}
+            {{ form.condition }}
+        </div>
+        <div class="mb-3">
+            {{ form.category.label_tag }}
+            {{ form.category }}
+        </div>
+        <div class="mb-3">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
     <footer>
       <div class="container">
         <p>&copy; 2024 Marketplace</p>
