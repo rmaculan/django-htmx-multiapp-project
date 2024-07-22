@@ -1,0 +1,12 @@
+<!-- mysite/templates/landing_page.html -->
+
+
+{% block content %}
+  <h1>Welcome to Our Platform!</h1>
+  <p>Explore our blog and marketplace.</p>
+
+  <div class="flex justify-around">
+    <a href="{% url 'blog:index' %}" class="btn btn-primary">Go to Blog</a>
+    <a href="{% url 'marketplace:index' %}" class="btn btn-secondary">Visit Marketplace</a>
+  </div>
+{% endblock %}
