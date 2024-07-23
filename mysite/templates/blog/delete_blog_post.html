@@ -28,22 +28,33 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-black hover:text-accent">
-              About
+            {% if user.is_authenticated %}
+            <a href="{% url 'blog:my_posts' %}" class="text-black hover:text-accent">
+              My Blogs
             </a>
+            {% endif %}
             </li>
             <li>
-              <a href="#" class="text-black hover:text-accent">
-                Contact
-              </a>
-            </li>
-            <li>
+              {% if user.is_authenticated %}
               <a
                 href="{% url 'blog:create_blog_post' %}"
                 class="text-black hover:text-accent"
               >
                 Post Blog
               </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="text-black hover:text-accent"
+              >
+                Login
+              </a>
+              {% endif %}
+              <li>
+              <a href="#" class="text-black hover:text-accent">
+                Contact
+              </a>
+            </li>
             </li>
           </li>
         </ul>
@@ -106,7 +117,7 @@
                 Profile
               </a>
               <a
-                href="{% url 'blog:index' %}"
+                href="{% url 'blog:logout' %}"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >

@@ -28,22 +28,29 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-black hover:text-accent">
-              About
+            {% if user.is_authenticated %}
+            <a href="{% url 'blog:my_posts' %}" class="text-black hover:text-accent">
+              My Blogs
             </a>
-          </li>
-          <li>
-              <a href="#" class="text-black hover:text-accent">
-                Contact
+            {% endif %}
+            </li>
+            <li>
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'blog:create_blog_post' %}"
+                class="text-black hover:text-accent"
+              >
+                Post Blog
               </a>
-          </li>
-          <li>
-            <a
-              href="{% url 'blog:create_blog_post' %}"
-              class="text-black hover:text-accent"
-            >
-              Post Blog
-            </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="text-black hover:text-accent"
+              >
+                Login
+              </a>
+              {% endif %}
+            </li>
           </li>
         </ul>
 
@@ -52,7 +59,19 @@
           <div>
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="
+              inline-flex 
+              justify-center w-full 
+              rounded-md border 
+              border-gray-300 
+              shadow-sm px-4 py-2 
+              bg-white text-sm font-medium text-gray-700 
+              hover:bg-gray-50 
+              focus:outline-none 
+              focus:ring-2 
+              focus:ring-offset-2 f
+              ocus:ring-indigo-500
+              "
               id="options-menu"
               aria-haspopup="true"
               aria-expanded="true"
@@ -93,7 +112,7 @@
                 Profile
               </a>
               <a
-                href="{% url 'blog:index' %}"
+                href="{% url 'blog:logout' %}"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
@@ -106,13 +125,6 @@
                 role="menuitem"
               >
                 Login
-              </a>
-              <a 
-                href=""
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                Register
               </a>
               {% endif %}
               

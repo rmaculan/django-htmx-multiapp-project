@@ -12,23 +12,74 @@
   </head>
 <body class="bg-gray-100">
     <header class="text-center p-12 bg-blue-500 text-white relative">
-        <h1 class="text-4xl font-bold mb-2">Welcome to Our Platform!</h1>
-        <p class="max-w-xl mx-auto mb-4">Discover blogs and explore items for sale.</p>
+        <h1 class="text-4xl font-bold mb-2">
+            Welcome to Our Platform!
+        </h1>
+        <p class="max-w-xl mx-auto mb-4">
+            Discover blogs and explore items for sale.
+        </p>
         <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black opacity-50"></div>
     </header>
     <div class="container mx-auto">
     <section class="container mx-auto px-4 py-8">
         <div class="text-center">
-            <h2 class="text-3xl font-semibold mb-2">Explore Our Offerings</h2>
-            <p class="mb-8">Whether you're looking for inspiration or seeking the perfect item, we've got you covered.</p>
+            <h2 class="text-3xl font-semibold mb-2">
+                Explore Our Offerings
+            </h2>
+            <p class="mb-8">
+                Whether you're looking for inspiration or seeking the perfect item, we've got you covered.
+            </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="col-span-full md:col-span-1">
-                <a href="{% url 'blog:index' %}" class="btn btn-primary w-full">Go to Blog</a>
+                <a 
+                    href="{% url 'blog:index' %}" 
+                    class="btn btn-primary w-full">
+                    Go to Blog
+                </a>
             </div>
             <div class="col-span-full md:col-span-1">
-                <a href="{% url 'marketplace:index' %}" class="btn btn-secondary w-full">Visit Marketplace</a>
+                <a 
+                    href="{% url 'marketplace:index' %}" 
+                    class="btn btn-secondary w-full">
+                    Visit Marketplace
+                </a>
             </div>
       </div>
+    </section>
+
+     <!-- Browse new articles -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-semibold mb-2">
+                Browse New Articles
+            </h2>
+            <p class="mb-8">
+                Stay up-to-date with the latest news and trends.
+            </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for blog_post in blog_posts %}
+            <div class="col-span-full md:col-span-1">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    
+                    <h3 class="text-xl font-semibold mb-2">
+                        {{ blog_post.title }}
+                    </h3>
+                    <p class="mb-4">
+                        {{ blog_post.content }}
+                    </p>
+                    <a 
+                        href="{% url 'blog:post_detail' blog_post.id %}" 
+                        class="btn btn-primary w-full">
+                        Read More
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+     <!-- Shop our latest items -->
+    <!-- Footer -->
   </body>
 </html>

@@ -28,14 +28,11 @@
             </a>
           </li>
           <li>
-            <a href="#" class="text-black hover:text-accent">
-              About
+            {% if user.is_authenticated %}
+            <a href="{% url 'blog:my_posts' %}" class="text-black hover:text-accent">
+              My Blogs
             </a>
-            </li>
-            <li>
-              <a href="#" class="text-black hover:text-accent">
-                Contact
-              </a>
+            {% endif %}
             </li>
             <li>
               {% if user.is_authenticated %}
@@ -123,6 +120,13 @@
               </a>
               {% else %}
               <a
+                href="{% url 'blog:register' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Register
+              </a>
+              <a
                 href="{% url 'blog:login' %}"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
@@ -144,13 +148,22 @@
     <div class="container mx-auto px-2 py-4">
        <p class="text-3xl mb-4">
           {% if user.is_authenticated %}
-          Welcome, {{ user.username }}
+          Welcome, {{ user.username }}!
           {% else %}
-          Welcome, Guest
+          Welcome, Guest!
           {% endif %}
         </p>
     </div>
-        
+
+        <!-- button that returns to main landing page under templates -->
+        <div class="container mx-auto px-2 py-4">
+          <a
+            href="{% url 'landing' %}"
+            >
+            Return to main page
+          </a>
+        </div>
+
       <!-- Blog Content -->
     <main class="container mx-auto px-4 py-8">
 
@@ -161,37 +174,30 @@
         <div class="container mx-auto px-4">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {% for post in posts %}
-    <div class="col-span-1 md:col-span-1 lg:col-span-1"> <!-- Ensure each article spans one column -->
-      <article class="blog-content prose prose-lg max-w-none p-4">
-        <h2 class="text-xl font-bold">{{ post.title }}</h2>
-        <img
-          src="{{ post.thumbnail.url }}"
-          alt="{{ post.title }}"
-          width="1000"
-          height="600"
-        />
-        <p>{{ post.content | truncatewords:12 }}</p>
+<div class="col-span-1 md:col-span-1 lg:col-span-1"> <!-- Ensure each article spans one column -->
+  <article class="blog-content prose prose-lg max-w-none p-4">
+    <h2 class="text-xl font-bold">{{ post.title }}</h2>
+    {% if post.thumbnail %}
+      <img
+        src="{{ post.thumbnail.url }}"
+        alt="{{ post.title }}"
+        width="1000"
+        height="600"
+      />
+    {% else %}
+      <!-- Display a default image or nothing -->
+      <img src="/static/images/default_thumbnail.jpg" alt="{{ post.title }}" width="1000" height="600" />
+    {% endif %}
+    <p>{{ post.content | truncatewords:12 }}</p>
 
-        <div class="ml-2 text-xs">
-          <span class="block font-semibold text-gray-700">
-            {{ post.author }}
-          </span>
-          <span class="block font-medium text-gray-500">
-            Chief Technical Writer
-          </span>
-        </div>
-        <a
-          href="{% url 'blog:post_detail' post.id %}"
-          class="mt-4 block bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          View
-        </a>
-      </article>
+    <div class="ml-2 text-xs">
+      <span class="block font-semibold text-gray-700">
+        {{ post.author }}
+      </span>
     </div>
-    {% empty %}
-    <p>No posts available.</p>
-    {% endfor %}
-  </div>
+  </article>
+</div>
+{% endfor %}
 </div>
         
       </main>

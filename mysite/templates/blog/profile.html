@@ -9,72 +9,133 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>Blog</title>
   </head>
-    <body>
-        <header class="bg-primary py-4">
-            <nav class="container mx-auto flex justify-between items-center px-4">
-                <ul class="hidden sm:flex space-x-4">
-                    <li>
-                        <a
-                            href="{% url 'blog:index' %}"
-                            class="text-black hover:text-accent"
-                        >
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <button
-                            class="text-black hover:text-accent"
-                            onclick="toggleDropdown()"
-                        >
-                            About
-                        </button>
-                    </li>
-                    <li>
-                        <div
-                            id="about-dropdown"
-                            class="hidden absolute left-0 mt-2 w-48 py-2 bg-white rounded-md shadow-lg"
-                        >
-                            <a
-                                a
-                                href=""
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                >Contact</a
-                            >
-                        </div>
-                    </li>
-                </ul>
-                <div class="relative inline-block text-left">
-                    <div>
-                        <button
-                            type="button"
-                            class="text-black hover:text-accent"
-                            onclick="toggleDropdown()"
-                        >
-                            Account
-                        </button>
-                    </div>
-                    <div
-                        id="account-dropdown"
-                        class="hidden absolute left-0 mt-2 w-48 py-2 bg-white rounded-md shadow-lg"
-                    >
-                        <a
-                            href="{% url 'blog:profile' %}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                            >Profile</a
-                        >
-                        <a
-                            href="{% url 'blog:login' %}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                            >Login</a
-                        >
-                    </div>
-                </div>
-            </nav>
-        </header>
+  <body>
+    <header class="bg-primary py-4">
+      <nav class="container mx-auto flex justify-between items-center px-4">
+        
+
+        <!-- Add collapsable, unordered list of tabs: home, about, contact -->
+        <ul class="hidden sm:flex space-x-4">
+          <li>
+            <a
+              href="{% url 'blog:index' %}"
+              class="text-black hover:text-accent"
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'blog:my_posts' %}" class="text-black hover:text-accent">
+              My Blogs
+            </a>
+            </li>
+            <li>
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'blog:create_blog_post' %}"
+                class="text-black hover:text-accent"
+              >
+                Post Blog
+              </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="text-black hover:text-accent"
+              >
+                Login
+              </a>
+              {% endif %}
+              <li>
+              <a href="#" class="text-black hover:text-accent">
+                Contact
+              </a>
+            </li>
+            </li>
+          </li>
+        </ul>
+
+        <!-- Add dropdown menu for account options -->
+        <div class="relative inline-block text-left">
+          <div>
+            <button
+              type="button"
+              class="
+              inline-flex 
+              justify-center w-full 
+              rounded-md border 
+              border-gray-300 
+              shadow-sm px-4 py-2 
+              bg-white text-sm font-medium text-gray-700 
+              hover:bg-gray-50 
+              focus:outline-none 
+              focus:ring-2 
+              focus:ring-offset-2 f
+              ocus:ring-indigo-500
+              "
+              id="options-menu"
+              aria-haspopup="true"
+              aria-expanded="true"
+            >
+              Account
+              <svg
+                class="-mr-1 ml-2 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Initially hidden dropdown menu -->
+          <div
+            class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 dropdown"
+          >
+            <div
+              class="py-1"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="options-menu"
+            >
+              {% if user.is_authenticated %}
+              <a
+                href="{% url 'blog:profile' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Profile
+              </a>
+              <a
+                href="{% url 'blog:logout' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Logout
+              </a>
+              {% else %}
+              <a
+                href="{% url 'blog:login' %}"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Login
+              </a>
+              {% endif %}
+              
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
         <main class="container mx-auto py-4">
             <h1 class="text-3xl font-bold">Profile</h1>
             <p>Welcome to your profile page!</p>

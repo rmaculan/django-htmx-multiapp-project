@@ -13,6 +13,38 @@
     />
     <title>{% block title %} Free Marketplace {% endblock %}</title>
     <style>
+
+      .hero-banner {
+        background-color: #007bff; /* Example vibrant blue */
+        color: white;
+        padding: 50px 0;
+        text-align: center;
+      }
+
+      .hero-banner h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .hero-banner p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .hero-banner a {
+        color: white; /* Change the link color to white */
+        text-decoration: none; /* Remove underline */
+      }
+
+      .hero-banner a:hover {
+        color: #ff6347; /* Optional: change hover color for better interaction */
+      }
+
+      .btn-primary {
+        background-color: #0056b3; /* Darker shade for contrast */
+        border-color: #003d6f;
+      }
+
       .card {
         max-width: 300px;
         margin: auto; /* Center the card */
@@ -50,7 +82,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'marketplace:index' %}">
-          Free Marketspace
+          Marketspace
         </a>
         <button
           class="navbar-toggler"
@@ -123,7 +155,33 @@
         </div>
       </div>
     </nav>
-    {% block content %} 
+
+    <!-- Hero banner -->
+    <div class="hero-banner">
+      <div class="container">
+        <h1>Welcome to the Ultimate Marketplace!</h1>
+        <p>Discover, Buy, and Sell Anything You Want.</p>
+        <p>Explore Now or Return to
+          <a
+            href="{% url 'landing' %}"
+            >
+             Main Page
+          </a>
+        </p>
+      </div>
+    </div>
+
+    {% block content %}
+    <div class="container mx-auto px-2 py-4">
+       <h1 class="text-3xl mb-4">
+          {% if user.is_authenticated %}
+          Welcome, {{ user.username }}!
+          {% else %}
+          Welcome, Guest!
+          {% endif %}
+        </h1>
+    </div>
+
     {% if newest_items %}
     <div class="container">
       <h1>Newest Items</h1>
