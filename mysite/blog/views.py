@@ -39,6 +39,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            
             # Redirect to a success page.
             return redirect('blog:index')  # Assuming 'index' redirects to your homepage
     else:
