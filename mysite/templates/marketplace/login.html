@@ -88,7 +88,11 @@
                 </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'marketplace:login' %}">
-                  {% if user.is_authenticated %} Logout {% else %} Login {% endif %}
+                  {% if user.is_authenticated %} 
+                  Logout 
+                  {% else %} 
+                  Login 
+                  {% endif %}
                   </a>
                 </li>
               </ul>
@@ -113,6 +117,25 @@
       {% if error %}
       <p style="color: red">{{ error }}</p>
       {% endif %} {% endblock %}
+
+      <!-- Forgot Passqord Link -->
+      <a 
+        href="{% url 'password_reset' %}" 
+        class="block mt-4 text-blue-500"
+        >
+          Forgot Password?
+      </a>
+      
+      <!-- Register Link -->
+      <p>
+        Don't have an account? 
+        <a 
+          href="{% url 'blog:register' %}" 
+          class="text-blue-500"
+          >
+            Register
+        </a>
+      </p>
     </div>
   </body>
   <footer>
