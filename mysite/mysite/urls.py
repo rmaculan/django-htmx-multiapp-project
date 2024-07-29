@@ -9,6 +9,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', landing_page, name='landing'),
+    path('chat/', include('chatbot.urls', namespace='chatbot')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('polls/', include('polls.urls', namespace='polls')),
     path('blog/', include('blog.urls', namespace='blog')),

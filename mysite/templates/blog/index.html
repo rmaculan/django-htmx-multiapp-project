@@ -256,7 +256,17 @@
         <div class="container mx-auto px-2 py-4">
           <p class="text-center">
             Here you can find the latest articles and posts from our users.
-            Feel free to read, post, 
+            Feel free to access our
+            
+            <!-- button that redirects to the templates/chatbot app -->
+            <a
+              href="{% url 'chatbot:chat_view' %}"
+              class="text-blue-500 hover:underline"
+              >
+              AI Chat,
+            </a>
+            read, post, 
+            
             <!-- button that redirects to the templates/marketplace app -->
             <a
               href="{% url 'marketplace:index' %}"
