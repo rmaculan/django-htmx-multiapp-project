@@ -100,6 +100,48 @@
         </div> 
     </section>
 
+     <!-- Browse new articles -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-semibold mb-2">
+                Browse New Articles
+            </h2>
+            <p class="mb-8">
+                Stay up-to-date with the latest news and trends.
+            </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for blog_post in blog_posts %}
+            <div class="col-span-full md:col-span-1">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <img 
+                        src="{{ blog_post.thumbnail.url }}" 
+                        alt="{{ blog_post.title }}" 
+                        class="mb-4"
+                        height="600"
+                        width="400" 
+                        >
+                    <h3 class="text-xl font-semibold mb-2">
+                        {{ blog_post.title }}
+                    </h3>
+                    <strong>
+                        {{ blog_post.author }}
+                    </strong>
+                    <p class="mb-4">
+                        {{ blog_post.content|truncatewords:15 }} <!-- Truncate to 50 words -->
+                    </p>
+                    <a 
+                        href="{% url 'blog:post_detail' blog_post.id %}" 
+                        class="btn btn-primary w-full">
+                        Read More
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    
      <!-- Shop our latest items -->
     <section class="container mx-auto px-4 py-8">
         <div class="text-center">
@@ -141,80 +183,35 @@
                             href="{% url 'marketplace:item_detail' marketplace_item.id %}" 
                             class="btn btn-primary">
                             View Item
-                        </a>
-
+                    </a>
+                        
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %} 
         </div>s
     </section>
 
-     <!-- Blog link -->
+    <!-- Take a poll -->
     <section class="container mx-auto px-4 py-8">
         <div class="text-center">
             <h2 class="text-3xl font-semibold mb-2">
-                Read Our Latest Blogs
+                Take a Poll
             </h2>
             <p class="mb-8">
-                Stay informed and entertained with our latest blog posts.
+                Share your opinion and see what others think.
             </p>
         </div>
-         <div class="container mx-auto px-4 py-8">
-            <a 
-                href="{% url 'blog:index' %}" 
-                class="btn btn-primary"
-            >
-                Check out our blog!
-            </a>
-            <a 
-                href="{% url 'marketplace:index' %}" 
-                class="btn btn-primary"
-            >
-                Click here to start shopping!.. 
-            </a>
-        </div>
+        {% if latest_question_list %}
+        <ul>
+        {% for question in latest_question_list %}
+            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>    {% endfor %}
+        </ul>
+        {% else %}
+        <p>No polls are available.</p>
+        {% endif %}
     </section>
-
-     <!-- Browse new articles -->
-    <section class="container mx-auto px-4 py-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-semibold mb-2">
-                Browse New Articles
-            </h2>
-            <p class="mb-8">
-                Stay up-to-date with the latest news and trends.
-            </p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {% for blog_post in blog_posts %}
-            <div class="col-span-full md:col-span-1">
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <img 
-                        src="{{ blog_post.thumbnail.url }}" 
-                        alt="{{ blog_post.title }}" 
-                        class="mb-4"
-                        height="600"
-                        width="400" 
-                        >
-                    <h3 class="text-xl font-semibold mb-2">
-                        {{ blog_post.title }}
-                    </h3>
-                    <strong>
-                        {{ blog_post.author }}
-                    </strong>
-                    <p class="mb-4">
-                        {{ blog_post.content|truncatewords:15 }} <!-- Truncate to 50 words -->
-                    </p>
-                    <a 
-                        href="{% url 'blog:post_detail' blog_post.id %}" 
-                        class="btn btn-primary w-full">
-                        Read More
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
+     
+    
 
     <!-- Footer -->
     <footer class="text-center p-4 bg-blue-500 text-white">
