@@ -246,16 +246,36 @@
       <table class="border-collapse border border-gray-400 w-full">
         <thead>
           <tr>
-            <th class="border border-gray-400 px-4 py-2">Title</th>
-            <th class="border border-gray-400 px-4 py-2">Content</th>
-            <th class="border border-gray-400 px-4 py-2">Actions</th>
+            <th 
+              class="border border-gray-400 px-4 py-2"
+              >
+                Title
+            </th>
+            <th 
+              class="border border-gray-400 px-4 py-2"
+              
+                >Content
+            </th>
+            <th 
+              class="border border-gray-400 px-4 py-2"
+            >
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {% for post in posts %}
           <tr>
-            <td class="border border-gray-400 px-4 py-2">{{ post.title }}</td>
-            <td class="border border-gray-400 px-4 py-2">{{ post.content|truncatewords:10 }}</td>
+            <td 
+              class="border border-gray-400 px-4 py-2"
+            >
+              {{ post.title }}
+            </td>
+            <td 
+              class="border border-gray-400 px-4 py-2"
+            >
+              {{ post.content|truncatewords:10 }}
+            </td>
 ```
             <td class="border border-gray-400 px-4 py-2">
               <a href="{% url 'blog:update_blog_post' post.id %}">
@@ -268,6 +288,16 @@
         </tr>
           </tr>
           {% endfor %}
+          {% if posts.count == 0 %}
+          <tr>
+            <td 
+              class="border border-gray-400 px-4 py-2"
+             colspan="3"
+            >
+              No posts found.
+            </td>
+          </tr>    
+          {% endif %}
         </tbody>
 
         
