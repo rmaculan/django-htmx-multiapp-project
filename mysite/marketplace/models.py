@@ -2,14 +2,20 @@ import datetime
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
-from django.conf import settings  # Import settings to use MEDIA_ROOT
-from django.utils.translation import gettext as _
+from django.conf import settings  # Ensure this import is present at the top of your file
 
 
 # Create your models here.
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE
+        )
+    profile_image = models.ImageField(
+        upload_to='profiles/', 
+        blank=True, 
+        null=True
+        )
     is_seller = models.BooleanField(default=False)
     is_buyer = models.BooleanField(default=False)
     is_blog_author = models.BooleanField(default=False)
@@ -26,18 +32,63 @@ class Item(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='items/', blank=True, null=True)
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE
+        )
+    image = models.ImageField(
+        upload_to='items/', 
+        blank=True, 
+        null=True
+        )
     date_listed = models.DateTimeField(default=datetime.datetime.now)
     is_sold = models.BooleanField(default=False)
     if is_sold:
         date_sold = models.DateTimeField(default=datetime.datetime.now)
     condition = models.CharField(max_length=20, choices=[('N', 'New'), ('U', 'Used')], default='U')
-    category = models.ForeignKey(CategoryModel, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        CategoryModel, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+        )
 
     def __str__(self):
         return self.name
+    
+class UserMessage(models.Model):
+    item = models.ForeignKey(
+        Item, 
+        on_delete=models.CASCADE, 
+        null=True
+        )
+    sender = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='sent_messages'
+        )
+    receiver = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='received_messages'
+        )
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.sender.username} - {self.receiver.username}"
+    
+class Conversation(models.Model):
+    participants = models.ManyToManyField(
+        User, 
+        related_name='conversations'
+        )
+    messages = models.ManyToManyField(
+        UserMessage,
+        related_name='conversation'
+        )
+    start_time = models.DateTimeField(auto_now_add=True)
+    
 
 class Order(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -66,8 +117,16 @@ class Cart(models.Model):
 
 class Transaction(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bought_transactions')
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sold_transactions')
+    buyer = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='bought_transactions'
+        )
+    seller = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='sold_transactions'
+        )
 
     def __str__(self):
         return f"{self.order.item.name} - {self.buyer.username} - {self.seller.username}"
@@ -81,17 +140,30 @@ class PostModel(models.Model):
     
     title = models.CharField(max_length=200)
     content = models.TextField()
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='D')
+    status = models.CharField(
+        max_length=1, 
+        choices=STATUS_CHOICES, 
+        default='D'
+        )
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey('CategoryModel', on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        'CategoryModel', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+        )
 
     def __str__(self):
         return self.title
 
 class CommentModel(models.Model):
-    post = models.ForeignKey(PostModel, related_name='comments', on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        PostModel, 
+        related_name='comments', 
+        on_delete=models.CASCADE
+        )
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

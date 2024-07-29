@@ -2,8 +2,9 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import landing_page
+from .views import landing_page, logout_view
 from django.contrib.auth import views as auth_views
+
 
 
 urlpatterns = [

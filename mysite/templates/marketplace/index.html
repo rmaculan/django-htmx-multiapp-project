@@ -109,6 +109,11 @@
               <a class="nav-link" href="{% url 'marketplace:create_item' %}">
                 Sell
               </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'marketplace:messages' %}">
+                Messages
+              </a>
               {% endif %}
             </li>
 
@@ -159,7 +164,7 @@
         </div>
       </div>
     </nav>
-      </header>
+  </header>
     
 
     <!-- Hero banner -->
@@ -170,17 +175,19 @@
         <p>
           Not sure where to go?
         <a
-            href="{% url 'landing' %}"
-            >
-             Return to the Main Page
-          </a>
-            or
-          <a
             href="{% url 'blog:index' %}"
             class="btn btn-primary"
-            >
+          >
             Explore Blogs
-          </a>
+        </a>
+            or
+        <a
+            href="{% url 'landing' %}"
+            class="btn btn-primary"
+          >
+            Return to Home
+        </a>
+        
           
           
         </p>

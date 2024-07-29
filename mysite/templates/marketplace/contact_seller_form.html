@@ -13,6 +13,38 @@
     />
     <title>{% block title %} Free Marketplace {% endblock %}</title>
     <style>
+
+      .hero-banner {
+        background-color: #007bff; /* Example vibrant blue */
+        color: white;
+        padding: 50px 0;
+        text-align: center;
+      }
+
+      .hero-banner h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .hero-banner p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .hero-banner a {
+        color: white; /* Change the link color to white */
+        text-decoration: none; /* Remove underline */
+      }
+
+      .hero-banner a:hover {
+        color: #ff6347; /* Optional: change hover color for better interaction */
+      }
+
+      .btn-primary {
+        background-color: #0056b3; /* Darker shade for contrast */
+        border-color: #003d6f;
+      }
+
       .card {
         max-width: 300px;
         margin: auto; /* Center the card */
@@ -47,7 +79,8 @@
   </head>
 
   <body>
-     <header>
+    <section>
+      <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'marketplace:index' %}">
@@ -75,11 +108,6 @@
               {% if user.is_authenticated %}
               <a class="nav-link" href="{% url 'marketplace:create_item' %}">
                 Sell
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'marketplace:messages' %}">
-                Messages
               </a>
               {% endif %}
             </li>
@@ -132,41 +160,30 @@
       </div>
     </nav>
   </header>
+</section>
     <div class="container">
-    <h1 class="text-center">Items Listed</h1>
-    <div class="row">
-        {% for item in items %}
-        <div class="col-md-4">
-            <div class="card">
-                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.title }}</h5>
-                    <p class="card-text">{{ item.description }}</p>
-                    <p class="card-text">{{ item.price }}</p>
-                    <!-- Edit Button -->
-                    <a href="{% url 'marketplace:update_item' item.id %}" class="btn btn-primary">Edit</a>
-                    <!-- Delete Button -->
-                    <a href="{% url 'marketplace:delete_item' item.id %}" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
+      <h1>Contact Seller</h1>
+      <form method="POST">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label for="message" class="form-label">Message</label>
+          <textarea
+            class="form-control"
+            id="message"
+            name="message"
+            required
+          ></textarea>
         </div>
-        {% endfor %}
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
     </div>
-</div>
     <footer>
       <div class="container">
-        <p>&copy; 2024 Marketplace</p>
+        <p>&copy; 2022 Marketspace</p>
       </div>
     </footer>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"
-    ></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+      integrity="sha384-+0Z9j6U5v3Z8

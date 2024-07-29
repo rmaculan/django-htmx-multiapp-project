@@ -29,7 +29,7 @@
 <body class="bg-gray-100">
     <header class="text-center p-12 bg-blue-500 text-white relative">
         <h1 class="text-4xl font-bold mb-2">
-            Welcome to Our Platform {{ user.username }}!
+            Welcome to Our Platform!
         </h1>
         <p class="max-w-xl mx-auto mb-4">
             Discover blogs and explore items for sale.
@@ -39,6 +39,35 @@
             
       </div>
     </header>
+
+    <!-- Welcome Greeting with auth -->
+    <div class="container mx-auto px-4 py-8">
+        {% if user.is_authenticated %}
+        <strong>
+            Welcome back, {{ user.username }}!
+        </strong>
+        <a
+            href="{% url 'blog:logout' %}" 
+            class="button"
+        >
+            Logout?
+        </a>
+        {% else %}
+        <h1>Don't have an account yet? Signing in?</h3>
+        <a 
+            href="{% url 'blog:register' %}" 
+            class="btn btn-primary"
+        >
+            Register
+        </a>
+        <a 
+            href="{% url 'blog:login' %}" 
+            class="btn btn-primary"
+        >
+            Sign In
+        </a>
+        {% endif %}
+    </div>
  
     <section class="container mx-auto px-4 py-8">        
         <div class="text-center">
@@ -48,35 +77,29 @@
             <p class="mb-8">
                 Whether you're looking for inspiration 
                 or seeking the perfect item, we've got you covered.
+                Ready to start shopping?
+                
+                Ready to start reading?
             </p>
-            <h2>Ready to start shopping?</h2>
-            <a 
-                href="{% url 'marketplace:index' %}" 
-                class="btn btn-primary"
-            >
-                Shop Now
-            </a>
-            <h2>Ready to start reading?</h3>
-            <a 
-                href="{% url 'blog:index' %}" 
-                class="btn btn-primary"
-            >
-                Read Now
-            </a>
-            <h1>Don't have an account yet? Signing in?</h3>
-            <!-- stylish authentication buttons -->
-            <a 
-                href="{% url 'blog:register' %}" 
-                class="btn btn-primary"
-            >
-                Register
-            </a>
-             <a 
-                href="{% url 'blog:login' %}" 
-                class="btn btn-primary"
-            >
-                Sign In
-            </a>
+           
+            
+            <div class="container mx-auto px-4 py-8">
+                <a 
+                    href="{% url 'blog:index' %}" 
+                    class="btn btn-primary"
+                >
+                    Check out our blog!
+                </a>
+                <a 
+                    href="{% url 'marketplace:index' %}" 
+                    class="btn btn-primary"
+                >
+                    Click here to start shopping!.. 
+                </a>
+            </div>
+            
+            
+           
 
             
         </div>
@@ -129,13 +152,20 @@
                 Stay informed and entertained with our latest blog posts.
             </p>
         </div>
-        <div class="col-span-full md:col-span-1">
-            <a 
-                href="{% url 'blog:index' %}" 
-                class="btn btn-primary w-full">
-                Visit Blog
-            </a>
-        </div>
+         <div class="container mx-auto px-4 py-8">
+                <a 
+                    href="{% url 'blog:index' %}" 
+                    class="btn btn-primary"
+                >
+                    Check out our blog!
+                </a>
+                <a 
+                    href="{% url 'marketplace:index' %}" 
+                    class="btn btn-primary"
+                >
+                    Click here to start shopping!.. 
+                </a>
+            </div>
     </section>
 
      <!-- Browse new articles -->

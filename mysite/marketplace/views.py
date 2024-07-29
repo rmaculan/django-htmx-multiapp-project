@@ -3,12 +3,15 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required 
 from django import forms
-from .models import Item, CategoryModel, Question
+from .models import Item, UserMessage, Conversation, CategoryModel, Question
 import logging
 from django.views.generic.edit import CreateView
 from .forms import ItemPostForm
 from django.core.files.storage import default_storage
 from PIL import Image
+from django.http import HttpResponseBadRequest
+from django.db.models import Q
+
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +110,47 @@ def create_item(request):
         form = ItemPostForm()
         categories = CategoryModel.objects.all()  # Fetch all categories for selection
         return render(request, 'marketplace/item_form.html', {'form': form, 'categories': categories})
+    
+# Message seller
+def contact_seller_form(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    
+    if request.method == 'POST':
+        message_text = request.POST['message']
+        UserMessage.objects.create(
+            item=item, 
+            sender=request.user, 
+            message=message_text, 
+            receiver=item.seller
+        )
+        return redirect('marketplace:item_detail', item_id=item.id)
+    
+    # Handle GET request by rendering the form
+    return render(request, 'marketplace/contact_seller_form.html', {'item': item})
+    
+# user messages
+def user_messages(request):
+    messages = UserMessage.objects.filter(receiver=request.user)
+    return render(request, 'marketplace/messages.html', {'messages': messages})
+
+# view conversation from all parties
+def view_conversation(request, message_id):
+    message = get_object_or_404(UserMessage, pk=message_id)
+    # Adjusted to use Q objects for more flexible queries
+    conversation = Conversation.objects.filter(
+        Q(participants=message.sender) | Q(participants=message.receiver)
+    )
+    return render(request, 'marketplace/view_conversation.html', {'conversation': conversation, 'message': message})
+
+# Reply to message
+def reply_form(request, message_id):
+    message = get_object_or_404(UserMessage, pk=message_id)
+    if request.method == 'POST':
+        message.message = request.POST['message']
+        message.save()
+        return redirect('marketplace:messages')
+    else:
+        return render(request, 'marketplace/reply_form.html', {'message': message})
 
 # Read
 def item_list(request):
@@ -117,7 +161,7 @@ def item_detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     return render(request, 'marketplace/item_detail.html', {'item': item})
 
-# vview listed items by seller
+# view listed items by seller
 def seller_items(request):
     items = Item.objects.filter(seller=request.user)
     return render(request, 'marketplace/seller_items.html', {'items': items})
