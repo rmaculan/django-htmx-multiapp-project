@@ -11,21 +11,24 @@ from django.shortcuts import render
 from .models import Message
 import requests
 
+# index view
+def index(request):
+    return render(request, 'chatbot/index.html')
 
-def chat_view(request):
+@login_required
+def chat_view(request, pk):
     if request.method == "POST":
-        user_id = request.user.id  # Assuming this is the ID of the user you want to assign as the author
-        user_message = request.POST.get('user_message')  # Capture the user's message from the POST data
+        user_id = request.user.id 
+        user_message = request.POST.get('user_message') 
         if not user_message:
-            # Handle the case where user_message is missing or empty
-            # You might want to return an error response or set a default message
             return HttpResponseBadRequest("User message is required.")
-        user_instance = User.objects.get(id=user_id)  # Retrieve the User instance
+        user_instance = User.objects.get(id=user_id)
         
-        ai_chat_title = "AI Chat"  # Set the title of the AI Chat
+        ai_chat_title = "AI Chat" 
         ai_chat, created = AIChat.objects.get_or_create(
             title=ai_chat_title,
-            defaults={"author": user_instance},  # Use the User instance here
+            defaults={"author": user_instance},
+            pk=pk
             )
         
         bot_message = get_ai_response(user_message)
@@ -33,10 +36,20 @@ def chat_view(request):
             user_message=user_message,
             bot_message=bot_message,
             aichat=ai_chat,
-            chat_user=request.user  # Ensure request.user is a valid User instance
+            chat_user=request.user 
         )
     messages = Message.objects.all()
-    return render(request, 'chatbot/chat.html', {'messages': messages})
+
+    return render(
+        request, 
+        'chatbot/chat_detail.html', 
+        {   
+            
+            'messages': messages.order_by(
+                'timestamp', 
+                'aichat',
+                'sequence_number'),
+                  'pk': pk})
 
 
 def get_ai_response(user_input: str) -> str:
@@ -82,14 +95,16 @@ def get_existing_messages() -> list:
 # CRUD operations
 def chat_list(request):
     chats = AIChat.objects.all()
-    return render(request, 'chatbot/chat_list.html', {'chats': chats})
+    return render(
+        request, 
+        'chatbot/chat_list.html', 
+        {'chats': chats}
+        )
 
-def chat_detail(request, pk):
+
+def create_chat(request, pk):
     chat = AIChat.objects.get(pk=pk)
-    return render(request, 'chatbot/chat_detail.html', {'chat': chat})
 
-@login_required
-def create_chat(request):
     if request.method == 'POST':
         form = ChatForm(request.POST)
         if form.is_valid():
@@ -97,7 +112,12 @@ def create_chat(request):
             return redirect('chat_detail', pk=chat.pk)
     else:
         form = ChatForm()
-    return render(request, 'chatbot/chat_form.html', {'form': form})
+    return render(
+        request, 
+        'chatbot/chat_form.html', 
+        {'form': form, 'chat': chat}
+        )
+        
 
 # @login_required
 # def chat_edit(request, pk):

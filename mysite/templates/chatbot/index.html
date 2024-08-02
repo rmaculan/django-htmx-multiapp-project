@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Our Chatbot API</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'chatbot/style.css' %}"
+    />
+  </head>
+  <body>
+    <div>
+
+        <!-- greeting and button to chat_detail -->
+        <h1>Welcome</h1>
+
+        <!-- display chat history -->
+        <div class="container">
+            {% for chat in chat_list %}
+            <div class="user-message">
+                Message: {{ chat.user_message | truncatewords:10 }}
+            </div>
+            <div class="bot-message">
+                AI: {{ chat.bot_message }}
+            </div>
+             <!-- view conversation -->
+            <a 
+                class="button" 
+                href="{% url 'chatbot:chat_detail ' %}"
+                >
+                    View
+            </a>
+            {% endfor %}
+
+            <!-- create new chat link to chat_detail page -->
+            <a 
+                class="button" 
+                href=""
+                >
+                    Create New Chat
+            </a>
+        </div>
+
+        
+       
+        
+  </body>
+</html>

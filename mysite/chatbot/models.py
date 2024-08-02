@@ -54,22 +54,33 @@ class AIChat(models.Model):
         return self.title
 
 class Message(models.Model):
+    SEQUENCE_CHOICES = (
+        ('U', 'User'),
+        ('B', 'Bot'),
+    )
+    
     user_message = models.TextField()
     bot_message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     aichat = models.ForeignKey(
         AIChat, 
         on_delete=models.CASCADE,
-        null=False  # Allow null values
+        null=False
     )
     chat_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
-        null=False  # Ensure every message is linked to a user
+        null=False
     )
+    message_type = models.CharField(
+        max_length=1,
+        choices=SEQUENCE_CHOICES,
+        default='U'
+    )
+    sequence_number = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return self.user_message
+        return f"{self.aichat.title}: {self.user_message}"
 
 class Chatbot(models.Model):
     name = models.CharField(max_length=200)

@@ -236,7 +236,7 @@
                   <h5 class="card-title">{{ item.name }}</h5>
                   <strong>Price: {{ item.price }}</strong>
                   <h6>Seller: {{ item.seller }}</h6>
-                  <p class="card-text">Description: {{ item.description }}</p>
+                  <p class="card-text">Description: {{ item.description | truncatewords:10 }}</p>
                   <p class="card-text">
                     <small class="text-muted"
                       >Date Listed: {{ item.date_listed }}</small
