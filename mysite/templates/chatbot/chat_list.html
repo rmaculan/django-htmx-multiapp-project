@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'chatbot/style.css' %}">
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <div id="chatbox">
+        {% for chat in chat_list %}
+            <p>{{ chat.message }}</p>
+        {% endfor %}
+    </div>
+    <form action="{% url 'chatbot:chat_list' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="message">
+        <input type="submit" value="Send">
+    </form>
+</body>

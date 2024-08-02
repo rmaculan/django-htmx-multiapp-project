@@ -1,17 +1,41 @@
+from django.shortcuts import render, redirect
+from .models import AIChat, Message
+from django.contrib.auth.decorators import login_required
+from .forms import ChatForm
+import requests
+import os
+from django.contrib.auth.models import User
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from .models import Message
 import requests
-import os
 
 
 def chat_view(request):
     if request.method == "POST":
-        user_message = request.POST.get('message')
+        user_id = request.user.id
+        user_message = request.POST.get('user_message') 
+        if not user_message:
+            
+            return HttpResponseBadRequest("User message is required.")
+        user_instance = User.objects.get(id=user_id)
+        
+        def generate_title():
+            return f"AI Chat {AIChat.objects.count() + 1}"
+
+        ai_chat_title = generate_title()
+        ai_chat = AIChat.objects.get_or_create(
+            title=ai_chat_title,
+            defaults={"author": user_instance},
+            )
+        
         bot_message = get_ai_response(user_message)
         Message.objects.create(
-            user_message=user_message, 
-            bot_message=bot_message
-            )
+            user_message=user_message,
+            bot_message=bot_message,
+            aichat=ai_chat,
+            chat_user=request.user  # Ensure request.user is a valid User instance
+        )
     messages = Message.objects.all()
     return render(request, 'chatbot/chat.html', {'messages': messages})
 
@@ -26,10 +50,7 @@ def get_ai_response(user_input: str) -> str:
 
     # Data payload
     messages = get_existing_messages()
-    messages.append({
-        "role": "user", 
-        "content": f"{user_input}"
-        })
+    messages.append({"role": "user", "content": f"{user_input}"})
     data = {
         "model": "gpt-3.5-turbo",
         "messages": messages,
@@ -41,15 +62,10 @@ def get_ai_response(user_input: str) -> str:
         json=data
         )
     response_data = response.json()
-
-    # Check if there's an error in the response
-    if 'error' in response_data:
-        print("Error in API response:", response_data['error'])
-        return "Sorry, I encountered an error."
-
     print(f'{response_data = }')
     ai_message = response_data['choices'][0]['message']['content']
     return ai_message
+
 
 def get_existing_messages() -> list:
     """
@@ -58,13 +74,59 @@ def get_existing_messages() -> list:
     formatted_messages = []
 
     for message in Message.objects.values('user_message', 'bot_message'):
-        formatted_messages.append({
-            "role": "user", 
-            "content": message['user_message']
-            })
-        formatted_messages.append({
-            "role": "assistant", 
-            "content": message['bot_message']
-            })
+        formatted_messages.append({"role": "user", "content": message['user_message']})
+        formatted_messages.append({"role": "assistant", "content": message['bot_message']})
 
     return formatted_messages
+
+
+# CRUD operations
+def chat_list(request):
+    chats = AIChat.objects.all()
+    return render(request, 'chatbot/chat_list.html', {'chats': chats})
+
+def chat_detail(request, pk):
+    chat = AIChat.objects.get(pk=pk)
+    return render(request, 'chatbot/chat_detail.html', {'chat': chat})
+
+@login_required
+def create_chat(request):
+    if request.method == 'POST':
+        form = ChatForm(request.POST)
+        if form.is_valid():
+            chat = form.save()
+            return redirect('chat_detail', pk=chat.pk)
+    else:
+        form = ChatForm()
+    return render(request, 'chatbot/chat_form.html', {'form': form})
+
+# @login_required
+# def chat_edit(request, pk):
+#     chat = AIChat.objects.get(pk=pk)
+#     if request.method == 'POST':
+#         form = ChatForm(request.POST, instance=chat)
+#         if form.is_valid():
+#             chat = form.save()
+#             return redirect('chat_detail', pk=chat.pk)
+#     else:
+#         form = ChatForm(instance=chat)
+#     return render(request, 'chatbot/chat_form.html', {'form': form})
+
+# @login_required
+# def chat_delete(request, pk):
+#     AIChat.objects.get(pk=pk).delete()
+#     return redirect('chat_list')
+
+# # Chatbot
+# def chatbot(request):
+#     if request.method == 'POST':
+#         message = request.POST.get('message')
+#         response = requests.get(f'http://localhost:5005/webhooks/rest/webhook?message={message}')
+#         response = response.json()
+#         response = response[0]['text']
+#         Message.objects.create(sender='user', content=message)
+#         Message.objects.create(sender='bot', content=response)
+#         return render(request, 'chatbot/chatbot.html', {'response': response})
+#     return render(request, 'chatbot/chatbot.html')
+
+

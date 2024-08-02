@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.utils.translation import gettext as _
 from django.conf import settings
 
-# models for chatbot
 class ChatbotUser(AbstractUser):
     groups = models.ManyToManyField(
         Group,
@@ -23,8 +22,6 @@ class ChatbotUser(AbstractUser):
         related_query_name="chatbot_user",
     )
 
-    pass
-
 class ChatbotProfile(models.Model):
     user = models.OneToOneField(
         ChatbotUser, 
@@ -41,7 +38,7 @@ class ChatbotProfile(models.Model):
 
 class AIChat(models.Model):
     title = models.CharField(max_length=200)
-    content = models.TextField()
+    user_message = models.TextField()
     publish_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
@@ -63,12 +60,12 @@ class Message(models.Model):
     aichat = models.ForeignKey(
         AIChat, 
         on_delete=models.CASCADE,
-        null=True  # Allow null values
+        null=False  # Allow null values
     )
     chat_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE,
-        null=True  # Allow null values
+        null=False  # Ensure every message is linked to a user
     )
 
     def __str__(self):
