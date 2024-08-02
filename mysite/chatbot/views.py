@@ -6,6 +6,7 @@ import requests
 import os
 from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest
+
 from django.shortcuts import render
 from .models import Message
 import requests
@@ -13,20 +14,18 @@ import requests
 
 def chat_view(request):
     if request.method == "POST":
-        user_id = request.user.id
-        user_message = request.POST.get('user_message') 
+        user_id = request.user.id  # Assuming this is the ID of the user you want to assign as the author
+        user_message = request.POST.get('user_message')  # Capture the user's message from the POST data
         if not user_message:
-            
+            # Handle the case where user_message is missing or empty
+            # You might want to return an error response or set a default message
             return HttpResponseBadRequest("User message is required.")
-        user_instance = User.objects.get(id=user_id)
+        user_instance = User.objects.get(id=user_id)  # Retrieve the User instance
         
-        def generate_title():
-            return f"AI Chat {AIChat.objects.count() + 1}"
-
-        ai_chat_title = generate_title()
-        ai_chat = AIChat.objects.get_or_create(
+        ai_chat_title = "AI Chat"  # Set the title of the AI Chat
+        ai_chat, created = AIChat.objects.get_or_create(
             title=ai_chat_title,
-            defaults={"author": user_instance},
+            defaults={"author": user_instance},  # Use the User instance here
             )
         
         bot_message = get_ai_response(user_message)
