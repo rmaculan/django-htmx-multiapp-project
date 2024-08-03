@@ -2,9 +2,10 @@ import datetime
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
-from django.conf import settings
+from django.conf import settings  # Ensure this import is present at the top of your file
 
 
+# Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, 
@@ -91,7 +92,7 @@ class Conversation(models.Model):
 
 class Order(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField() 
+    quantity = models.PositiveIntegerField()  # Use PositiveIntegerField for non-negative integers
     buyer = models.CharField(max_length=100)
 
     def __str__(self):
@@ -99,7 +100,7 @@ class Order(models.Model):
 
 class Review(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    rating = models.PositiveIntegerField()  
+    rating = models.PositiveIntegerField()  # Use PositiveIntegerField for non-negative integers
     comment = models.TextField()
     reviewer = models.CharField(max_length=100)
 
@@ -109,7 +110,7 @@ class Review(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()  
+    quantity = models.PositiveIntegerField()  # Use PositiveIntegerField for non-negative integers
 
     def __str__(self):
         return f"{self.user.username} - {self.item.name}"
@@ -171,11 +172,7 @@ class CommentModel(models.Model):
         return f"Comment by {self.author} on {self.post.title}"
 
 class LikeModel(models.Model):
-    post = models.ForeignKey(
-        PostModel, 
-        related_name='likes', 
-        on_delete=models.CASCADE
-        )
+    post = models.ForeignKey(PostModel, related_name='likes', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -184,4 +181,22 @@ class LikeModel(models.Model):
     def __str__(self):
         return f"Like by {self.user} on {self.post.title}"
     
+# polls models
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    pub_date = models.DateTimeField("date published")
 
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    def __str__(self):
+        return self.question_text
+
+
+class Choice(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=200)
+    votes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.choice_text
