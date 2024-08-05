@@ -45,6 +45,7 @@ class Post(models.Model):
         ('published', 'Published'),
     )
     title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=200, blank=True)
     slug = models.SlugField(unique=True)
     content = models.TextField()
     status = models.CharField(
@@ -53,7 +54,11 @@ class Post(models.Model):
         default='draft'
         )
     publish_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE
+        )  # Changed to use custom user model
+    job_title = models.CharField(max_length=200, blank=True)
     on_delete=models.CASCADE
         
     thumbnail = models.ImageField(
