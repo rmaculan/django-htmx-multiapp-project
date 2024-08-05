@@ -66,6 +66,12 @@ class Post(models.Model):
         blank=True, 
         null=True
         )  # New field for thumbnail
+    
+    video = models.FileField(
+        upload_to='videos/', 
+        blank=True, 
+        null=True
+        )  # New field for video
 
     def save(
             self, 
