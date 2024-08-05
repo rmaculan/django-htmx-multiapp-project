@@ -282,18 +282,6 @@
             placeholder="Ex: A step by step guide"
             >
         </div>
-
-        <!-- Content Field -->
-        <div class="mb-4">
-          <label 
-            for="{{ form.content.id_for_label }}" 
-            class="block text-sm font-medium text-gray-700"
-            >
-            Content
-          </label>
-          <!-- Content Area -->
-          {{ form.content }}
-        </div>
         <!-- Job title Field -->
         <div class="mb-4">
           <label 
@@ -311,6 +299,20 @@
               focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             placeholder="Ex: Software Developer"
             >
+
+        <!-- Content Field -->
+        <div class="mb-4">
+          <label 
+            for="{{ form.content.id_for_label }}" 
+            class="block text-sm font-medium text-gray-700"
+            >
+            Content
+          </label>
+          <!-- Content Area -->
+          {{ form.content }}
+        </div>
+        
+          
         <div class="mb-4">
           <label 
             for="{{ form.image.id_for_label }}" 

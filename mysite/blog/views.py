@@ -60,7 +60,7 @@ def login_view(request):
 def logout_view(request):
     logger.info("Logout view accessed")
     logout(request)
-    return redirect('blog:index')
+    return redirect('blog:logout')
 
 def profile(request):
     return render(request, 'blog/profile.html')

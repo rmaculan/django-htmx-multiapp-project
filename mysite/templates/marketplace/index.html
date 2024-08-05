@@ -150,13 +150,15 @@
                   {% endif %}
                 </li>
                 <li>
+                  {% if user.is_authenticated %} 
+                  <a class="dropdown-item" href="{% url 'marketplace:logout' %}"> 
+                  Logout
+                  </a> 
+                  {% else %} 
                   <a class="dropdown-item" href="{% url 'marketplace:login' %}">
-                      {% if user.is_authenticated %}
-                          Logout
-                      {% else %}
-                          Login
-                      {% endif %}
+                  Login
                   </a>
+                  {% endif %}
                 </li>
               </ul>
             </li>

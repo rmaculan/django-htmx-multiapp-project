@@ -16,7 +16,6 @@
             integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
             crossorigin="anonymous">
     </script>
-    
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
   <body>
@@ -199,7 +198,8 @@
                 <li>
                   <a 
                     href="{% url 'blog:logout' %}" 
-                    class="block px-4 py-2 text-sm text-gray-700 
+                    class="
+                      block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
                       hover:text-gray-900 
                       dark:text-gray-200 
@@ -216,7 +216,10 @@
                     href="{% url 'blog:register' %}" 
                     class="block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
-                      hover:text-gray-900" 
+                      hover:text-gray-900 
+                      dark:text-gray-200 
+                      dark:hover:bg-gray-700 
+                      dark:hover:text-gray-100" 
                     role="menuitem"
                     >
                     Register
@@ -227,7 +230,10 @@
                     href="{% url 'blog:login' %}" 
                     class="block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
-                      hover:text-gray-900" 
+                      hover:text-gray-900 
+                      dark:text-gray-200 
+                      dark:hover:bg-gray-700 
+                      dark:hover:text-gray-100" 
                     role="menuitem"
                     >
                     Login
@@ -295,7 +301,9 @@
             {% for post in posts %}
             <div class="col-span-1 md:col-span-1 lg:col-span-1">
               <article class="blog-content prose prose-lg max-w-none p-4">
-                <h2 class="text-xl font-bold">{{ post.title }}</h2>
+                <h2 class="text-xl font-bold">
+                {{ post.title }}
+                </h2>
                  <!-- subtitle  -->
                 <h3 class="text-lg font-semibold text-gray-700">
                   {{ post.subtitle }}
@@ -344,7 +352,8 @@
     </div>
     <script 
       src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" 
-      defer>
+      defer
+      >
     </script>
   </body>
 </html>
