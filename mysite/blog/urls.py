@@ -14,4 +14,5 @@ urlpatterns = [
     path('create_blog_post/', views.create_blog_post, name='create_blog_post'),
     path('<int:post_id>/update/', views.update_blog_post, name='update_blog_post'),
     path('<int:post_id>/delete/', views.delete_blog_post, name='delete_blog_post'),
+    path('<int:post_id>/like/', views.like_post, name='like_post'),
 ]

@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Post
+from .models import Post, Like
 from django.views.generic.edit import CreateView
-from .forms import PostForm
+from .forms import PostForm, LikeForm
 from django.core.files.storage import default_storage
 from PIL import Image
 from .models import Post
@@ -114,3 +114,78 @@ def delete_blog_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     post.delete()
     return redirect('blog:index')
+
+def search_posts(request):
+    query = request.GET.get('query')
+    blog_posts = Post.objects.filter(title__icontains=query)
+    return render(request, 'blog/index.html', {'posts': blog_posts})
+
+def search_posts_by_author(request):
+    query = request.GET.get('query')
+    blog_posts = Post.objects.filter(author__username__icontains=query)
+    return render(request, 'blog/index.html', {'posts': blog_posts})
+
+def like_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            # Redirect to login page if user is not logged in
+            return redirect('blog:login')
+        elif not post.likes.filter(id=request.user.id).exists():
+            # Increment likes count if the user hasn't liked the post yet
+            post.likes_count += 1
+            post.save()
+            # Optionally, create a Like object to keep track of the relationship
+            Like.objects.create(user=request.user, post=post)
+        return redirect('blog:post_detail', post_id=post.id)
+    else:
+        # Handle GET requests appropriately
+        pass
+    return redirect('blog:index')
+
+
+
+
+
+
+
+
+
+
+
+
+# region: Commented out code
+
+## The following code is commented out because it is not needed for the tutorial
+
+# def unlike_post(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     post.likes -= 1
+#     post.save()
+#     return redirect('blog:index')
+
+# def comment_on_post(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     if request.method == 'POST':
+#         content = request.POST.get('content')
+#         post.comments.create(author=request.user, content=content)
+#     return redirect('blog:post_detail', post_id=post_id)
+
+# def update_comment(request, post_id, comment_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     comment = get_object_or_404(post.comments, pk=comment_id)
+#     if request.method == 'POST':
+#         content = request.POST.get('content')
+#         comment.content = content
+#         comment.save()
+#     return redirect('blog:post_detail', post_id=post_id)
+
+# def delete_comment(request, post_id, comment_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     comment = get_object_or_404(post.comments, pk=comment_id)
+#     comment.delete()
+#     return redirect('blog:post_detail', post_id=post_id)
+
+# endregion
+
+
