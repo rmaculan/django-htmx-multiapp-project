@@ -150,22 +150,24 @@
                   {% endif %}
                 </li>
                 <li>
+                  {% if user.is_authenticated %} 
+                  <a class="dropdown-item" href="{% url 'marketplace:logout' %}"> 
+                  Logout
+                  </a> 
+                  {% else %} 
                   <a class="dropdown-item" href="{% url 'marketplace:login' %}">
-                      {% if user.is_authenticated %}
-                          Logout
-                      {% else %}
-                          Login
-                      {% endif %}
+                  Login
                   </a>
+                  {% endif %}
                 </li>
               </ul>
             </li>
           </ul>
         </div>
-        </div>
-        </nav>
-      </header>
-    </section>
+      </div>
+    </nav>
+  </header>
+    
 
     <!-- Hero banner -->
     <div class="hero-banner">
@@ -236,7 +238,7 @@
                   <h5 class="card-title">{{ item.name }}</h5>
                   <strong>Price: {{ item.price }}</strong>
                   <h6>Seller: {{ item.seller }}</h6>
-                  <p class="card-text">Description: {{ item.description | truncatewords:10 }}</p>
+                  <p class="card-text">Description: {{ item.description }}</p>
                   <p class="card-text">
                     <small class="text-muted"
                       >Date Listed: {{ item.date_listed }}</small

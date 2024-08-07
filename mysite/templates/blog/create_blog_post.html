@@ -257,8 +257,48 @@
             >
             Title
           </label>
-          {{ form.title }}
+          <!-- Input Field -->
+          <input 
+            type="text" 
+            name="title" 
+            id="{{ form.title.id_for_label }}" 
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm 
+              focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Ex: How to create a blog post"
+            >
+          <label 
+            for="{{ form.subtitle.id_for_label }}" 
+            class="block text-sm font-medium text-gray-700"
+            >
+            Subtitle
+          </label>
+          <!-- Input Field -->
+          <input 
+            type="text" 
+            name="subtitle" 
+            id="{{ form.subtitle.id_for_label }}" 
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm 
+              focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Ex: A step by step guide"
+            >
         </div>
+        <!-- Job title Field -->
+        <div class="mb-4">
+          <label 
+            for="{{ form.job_title.id_for_label }}" 
+            class="block text-sm font-medium text-gray-700"
+            >
+            Job Title
+          </label>
+          <!-- Input Field -->
+          <input 
+            type="text" 
+            name="job_title" 
+            id="{{ form.job_title.id_for_label }}" 
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm 
+              focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Ex: Software Developer"
+            >
 
         <!-- Content Field -->
         <div class="mb-4">
@@ -268,8 +308,11 @@
             >
             Content
           </label>
+          <!-- Content Area -->
           {{ form.content }}
         </div>
+        
+          
         <div class="mb-4">
           <label 
             for="{{ form.image.id_for_label }}" 

@@ -45,7 +45,24 @@ class Post(models.Model):
         ('published', 'Published'),
     )
     title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=200, blank=True)
     slug = models.SlugField(unique=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE
+        )  # Changed to use custom user model
+    job_title = models.CharField(max_length=200, blank=True)
+    thumbnail = models.ImageField(
+        upload_to='thumbnails/', 
+        blank=True, 
+        null=True
+        )  # New field for thumbnail
+    
+    video = models.FileField(
+        upload_to='videos/', 
+        blank=True, 
+        null=True
+        )  # New field for video
     content = models.TextField()
     status = models.CharField(
         max_length=10, 
@@ -53,14 +70,15 @@ class Post(models.Model):
         default='draft'
         )
     publish_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     on_delete=models.CASCADE
-        
-    thumbnail = models.ImageField(
-        upload_to='thumbnails/', 
-        blank=True, 
-        null=True
-        )  # New field for thumbnail
+    likes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='Like',
+        related_name='liked_posts',
+        blank=True,
+    )
+    likes_count = models.IntegerField(default=0)    
+    
 
     def save(
             self, 
@@ -101,16 +119,15 @@ class Comment(models.Model):
 class Like(models.Model):
     post = models.ForeignKey(
         Post, 
-        related_name='likes', 
         on_delete=models.CASCADE
         )
     user = models.ForeignKey(
-        BlogCustomUser, 
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
         )
 
     class Meta:
-        unique_together = ('post', 'user')  # Prevents duplicate likes from the same user
+        unique_together = ('post', 'user')
 
     def __str__(self):
         return f"Like by {self.user} on {self.post.title}"

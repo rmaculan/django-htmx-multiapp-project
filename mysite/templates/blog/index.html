@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.12"
@@ -15,8 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.12"
             integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
-            crossorigin="anonymous"></script>
-    
+            crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
   <body>
@@ -199,7 +198,8 @@
                 <li>
                   <a 
                     href="{% url 'blog:logout' %}" 
-                    class="block px-4 py-2 text-sm text-gray-700 
+                    class="
+                      block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
                       hover:text-gray-900 
                       dark:text-gray-200 
@@ -216,7 +216,10 @@
                     href="{% url 'blog:register' %}" 
                     class="block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
-                      hover:text-gray-900" 
+                      hover:text-gray-900 
+                      dark:text-gray-200 
+                      dark:hover:bg-gray-700 
+                      dark:hover:text-gray-100" 
                     role="menuitem"
                     >
                     Register
@@ -227,7 +230,10 @@
                     href="{% url 'blog:login' %}" 
                     class="block px-4 py-2 text-sm text-gray-700 
                       hover:bg-gray-100 
-                      hover:text-gray-900" 
+                      hover:text-gray-900 
+                      dark:text-gray-200 
+                      dark:hover:bg-gray-700 
+                      dark:hover:text-gray-100" 
                     role="menuitem"
                     >
                     Login
@@ -256,25 +262,17 @@
         <div class="container mx-auto px-2 py-4">
           <p class="text-center">
             Here you can find the latest articles and posts from our users.
-<<<<<<< HEAD
-<<<<<<< HEAD
             Feel free to access our
             
             <!-- button that redirects to the templates/chatbot app -->
             <a
-              href="{% url 'chatbot:index' %}"
+              href="{% url 'chatbot:chatbot' %}"
               class="text-blue-500 hover:underline"
               >
               AI Chat,
             </a>
             read, post, 
             
-=======
-            Feel free to read, post, 
->>>>>>> parent of e0c873a (chatbot implementation)
-=======
-            Feel free to read, post, 
->>>>>>> parent of e0c873a (chatbot implementation)
             <!-- button that redirects to the templates/marketplace app -->
             <a
               href="{% url 'marketplace:index' %}"
@@ -301,9 +299,15 @@
         <div class="container mx-auto px-4">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {% for post in posts %}
-            <div class="col-span-1 md:col-span-1 lg:col-span-1"> <!-- Ensure each article spans one column -->
+            <div class="col-span-1 md:col-span-1 lg:col-span-1">
               <article class="blog-content prose prose-lg max-w-none p-4">
-                <h2 class="text-xl font-bold">{{ post.title }}</h2>
+                <h2 class="text-xl font-bold">
+                {{ post.title }}
+                </h2>
+                 <!-- subtitle  -->
+                <h3 class="text-lg font-semibold text-gray-700">
+                  {{ post.subtitle }}
+                </h3>
                 {% if post.thumbnail %}
                 <img
                   src="{{ post.thumbnail.url }}"
@@ -327,6 +331,11 @@
                     {{ post.author }}
                   </span>
                 </div>
+                <div class="ml-2 text-xs">
+                  <span class="block font-semibold text-gray-700">
+                    {{ post.job_title }}
+                  </span>
+                </div>
                 <a 
                   href="{% url 'blog:post_detail' post.id %}" 
                   class="btn btn-primary mt-4"
@@ -343,7 +352,8 @@
     </div>
     <script 
       src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" 
-      defer>
+      defer
+      >
     </script>
   </body>
 </html>
