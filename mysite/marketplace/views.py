@@ -54,11 +54,16 @@ def login_view(request):
                 return redirect('marketplace:index')
         else:
             form = AuthenticationForm()
-        return render(request, 'marketplace/login.html', {'form': form})
+        return render(request, 'registration/login.html', {'form': form})
 
 def logout_view(request):
+    # Perform any necessary actions here, e.g., logging
     logger.info("Logout view accessed")
+    
+    # Use Django's built-in logout view
     logout(request)
+    
+    # Redirect to the home page or another appropriate page after logout
     return redirect('marketplace:index')
         
 def user_profile(request):

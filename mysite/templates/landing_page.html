@@ -46,12 +46,6 @@
         <strong>
             Welcome back, {{ user.username }}!
         </strong>
-        <a
-            href="{% url 'blog:logout' %}" 
-            class="button"
-        >
-            Logout?
-        </a>
         {% else %}
         <h1>Don't have an account yet? Signing in?</h3>
         <a 
@@ -61,7 +55,7 @@
             Register
         </a>
         <a 
-            href="{% url 'blog:login' %}" 
+            href="{% url 'login' %}" 
             class="btn btn-primary"
         >
             Sign In

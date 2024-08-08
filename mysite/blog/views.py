@@ -55,12 +55,17 @@ def login_view(request):
                 return redirect('blog:index')
         else:
             form = AuthenticationForm()
-        return render(request, 'blog/login.html', {'form': form})
+        return render(request, 'registration/login.html', {'form': form})
 
 def logout_view(request):
+    # Perform any necessary actions here, e.g., logging
     logger.info("Logout view accessed")
+    
+    # Use Django's built-in logout view
     logout(request)
-    return redirect('blog:logout')
+    
+    # Redirect to the home page or another appropriate page after logout
+    return redirect('blog:index')
 
 def profile(request):
     return render(request, 'blog/profile.html')

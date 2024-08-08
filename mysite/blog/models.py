@@ -4,41 +4,6 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.conf import settings
 
-class BlogCustomUser(AbstractUser):
-    # Fields specific to blog app
-    ...
-
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_('groups'),
-        blank=True,
-        help_text=_("The groups this user belongs to."),
-        related_name="blog_customuser_groups",
-        related_query_name="blog_customuser",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        help_text=_("Specific permissions for this user."),
-        related_name="blog_customuser_permissions",
-        related_query_name="blog_customuser",
-    )
-
-class BloggerProfile(models.Model):
-    user = models.OneToOneField(
-        BlogCustomUser, 
-        on_delete=models.CASCADE
-        )
-    profile_image = models.ImageField(
-        upload_to='profiles/',
-          blank=True, 
-          null=True
-          )
-    is_seller = models.BooleanField(default=False)
-    is_buyer = models.BooleanField(default=False)
-    is_blog_author = models.BooleanField(default=False)
-
 class Post(models.Model):
     STATUS_CHOICES = (
         ('draft', 'Draft'),
@@ -107,7 +72,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE
         )
     author = models.ForeignKey(
-        BlogCustomUser, 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE
         )
     content = models.TextField()
